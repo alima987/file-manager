@@ -1,8 +1,14 @@
+import { homedir } from 'os';
+import { createInterface } from 'readline';
 const currentDirectory = () => {
-    const cwd = process.cwd();
-    console.log(`You are currently in ${cwd}`)
+    const currentDir = homedir()
+    console.log(`You are currently in ${currentDir}`)
 }
 
+const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
 const args = process.argv.slice(2);
 const usernameFilter = args.findIndex(arg=>arg.startWith('--username='));
 const username = "User";
@@ -14,6 +20,7 @@ const greeting = () => {
 }
 greeting();
 currentDirectory();
+rl.question(`Enter command`);
 
 const goodbye = () => {
     console.log(`Thank you for using File Manager, ${username}, goodbye!`)
@@ -23,4 +30,5 @@ process.on('exit', () => goodbye())
 process.on('SIGINT', () =>{
     process.exit();
 })
+
 
