@@ -1,6 +1,11 @@
 import { createInterface } from 'readline';
+import { resolve } from 'path'; 
+import { ls } from './operations/nwd.js';
+import * as nwd from './operations/nwd.js';
+
 export const app = async(username, homedir) => {
-        const currentDir = homedir
+    let currentDir = homedir;
+
     const rl = createInterface({
         input: process.stdin,
         output: process.stdout
@@ -14,26 +19,40 @@ export const app = async(username, homedir) => {
     process.on('SIGINT', () =>{
         process.exit();
     })
-    const commands = new Map ();
-    function processInput(input) {
-        const [command, ...args] = input.trim().split(' ');
-        return [command, args];
-    }
-    while (true) {
-        const qwestion = await new Promise(resolve => rl.question(`You are currently in ${currentDir}\n`, resolve));
-    
-        const [command, ...args] = processInput(qwestion);
-    
-        const commandsGf = commands.get(command)
-        if (commandsGf && validate(command, args)) {
-            try {
-                await commandsGf(args);
-            } catch (error) {
-                console.log(`Operation failed`);
-            }
+    async function up() {
+        const parentDir = resolve(currentDir, '..');
+        if (parentDir !== currentDir) {
+            currentDir = parentDir;
+            console.log(`You are currently in ${currentDir}`);
         } else {
-            console.log('Invalid input');
+            console.log(`You are already in the root folder ${currentDir}`);
         }
     }
+    async function cd (path) {
+        currentDir = await nwd.cd(currentDir, path);
+      }
     
+    async function ls () {
+        await nwd.ls(currentDir)
+    }
+    rl.on('line', (input) => {
+        const [command, ...args] = input.trim().split(' ');
+        switch (command) {
+            case 'up':
+                up();
+                break;
+            case 'cd':
+                cd(args[0]);
+                break;
+            case 'ls':
+                ls();
+                break;
+            default:
+                console.log('Invalid input');
+        }
+        rl.prompt();
+    });
+
+    rl.setPrompt(`You are currently in ${currentDir}\n`);
+    rl.prompt();
 }
