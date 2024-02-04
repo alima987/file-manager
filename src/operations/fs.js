@@ -1,7 +1,8 @@
 import { createReadStream } from "fs"; 
 import { writeFile } from 'fs/promises'; 
 import { path } from "../utils/path.js"; 
-import { resolve } from 'path'; 
+import { resolve, dirname, join } from 'path';
+import fs from 'fs';
  
 export async function cat(filePath) { 
  if (!await path(filePath)) { 
@@ -38,3 +39,16 @@ export function add(currentDir, fileName) {
         } 
     }); 
 };
+
+export function rn(currentDir, oldFileName, newFileName) {
+    const oldFilePath = resolve(currentDir, oldFileName);
+    const newFilePath = join(dirname(oldFilePath), newFileName);
+
+    fs.rename(oldFilePath, newFilePath, (err) => {
+        if (err) {
+            console.error('Error renaming file:', err);
+        } else {
+            console.log(`File ${oldFileName} renamed to ${newFileName} successfully in ${currentDir}`);
+        }
+    });
+}

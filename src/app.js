@@ -57,6 +57,10 @@ export const app = async(username, homedir) => {
         await fs.add(currentDir, fileName);
         updatePrompt();
     }
+    async function rn(oldFileName, newFileName) {
+        await fs.rn(currentDir, oldFileName, newFileName);
+        updatePrompt();
+    }
     
     rl.on('line', async (input) => {
         const [command, ...args] = input.trim().split(' ');
@@ -75,6 +79,9 @@ export const app = async(username, homedir) => {
                 break;
             case 'add':
                 await add(args[0]);
+                break;
+            case 'rn':
+                await rn(args[0], args[1]);
                 break;
             default:
                 console.log('Invalid input');
