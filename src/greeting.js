@@ -2,8 +2,8 @@ import { homedir } from "os";
 import { app } from "./app.js";
 
 const args = process.argv.slice(2);
-const usernameFilter = args.findIndex(arg=>arg.startWith('--username='));
-const username = "User";
+const usernameFilter = args.findIndex(arg=>arg.startsWith('--username='));
+let username = "User";
 if(usernameFilter !== -1) {
     username = args[usernameFilter].split('=')[1]
 }

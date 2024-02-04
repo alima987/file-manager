@@ -1,7 +1,7 @@
 import { createInterface } from 'readline';
 import { resolve } from 'path'; 
-import { ls } from './operations/nwd.js';
 import * as nwd from './operations/nwd.js';
+import * as fs from './operations/fs.js';
 
 export const app = async(username, homedir) => {
     let currentDir = homedir;
@@ -19,40 +19,68 @@ export const app = async(username, homedir) => {
     process.on('SIGINT', () =>{
         process.exit();
     })
+
+    function updatePrompt() {
+        rl.setPrompt(`You are currently in ${currentDir}\n`);
+        rl.prompt();
+    }
+
     async function up() {
         const parentDir = resolve(currentDir, '..');
         if (parentDir !== currentDir) {
             currentDir = parentDir;
-            console.log(`You are currently in ${currentDir}`);
+            updatePrompt();
         } else {
             console.log(`You are already in the root folder ${currentDir}`);
         }
     }
+    
     async function cd (path) {
-        currentDir = await nwd.cd(currentDir, path);
-      }
+        const newDir = await nwd.cd(currentDir, path);
+        if (newDir) {
+            currentDir = newDir;
+            updatePrompt();
+        }
+    }
     
     async function ls () {
-        await nwd.ls(currentDir)
+        await nwd.ls(currentDir);
+        updatePrompt();
     }
-    rl.on('line', (input) => {
+    
+    async function cat(pathToFile) {
+        await fs.cat(pathToFile);
+        updatePrompt();
+    }
+    
+    async function add(fileName) {
+        await fs.add(currentDir, fileName);
+        updatePrompt();
+    }
+    
+    rl.on('line', async (input) => {
         const [command, ...args] = input.trim().split(' ');
         switch (command) {
             case 'up':
-                up();
+                await up();
                 break;
             case 'cd':
-                cd(args[0]);
+                await cd(args[0]);
                 break;
             case 'ls':
-                ls();
+                await ls();
+                break;
+            case 'cat':
+                await cat(input.substring(4).trim());
+                break;
+            case 'add':
+                await add(args[0]);
                 break;
             default:
                 console.log('Invalid input');
+                rl.prompt();
         }
-        rl.prompt();
     });
 
-    rl.setPrompt(`You are currently in ${currentDir}\n`);
-    rl.prompt();
+    updatePrompt();
 }
