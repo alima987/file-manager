@@ -1,16 +1,28 @@
-import { existsSync, lstatSync, } from "fs"; 
+import { lstat } from 'fs/promises';
 import { join, resolve } from 'path'; 
 import { readdir, stat } from 'fs/promises'; 
  
-export async function cd(currentDir, path) { 
- const absPath = resolve(currentDir, path); 
- if (existsSync(absPath) && lstatSync(absPath).isDirectory()) { 
-     return absPath; 
- } else { 
-     console.error('Invalid directory path'); 
-     return currentDir; 
- } 
-} 
+export async function cd(currentDir, path) {
+  const absPath = resolve(currentDir, path);
+
+  try {
+      const stats = await lstat(absPath);
+
+      if (stats.isDirectory()) {
+          return absPath;
+      } else {
+          console.error('Invalid directory path');
+          return currentDir;
+      }
+  } catch (error) {
+      if (error.code === 'ENOENT') {
+          console.error('Directory does not exist');
+      } else {
+          console.error(`Error checking directory: ${error.message}`);
+      }
+      return currentDir;
+  }
+}
  
   export async function ls(currentDir) { 
     try { 
