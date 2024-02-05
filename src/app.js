@@ -61,7 +61,18 @@ export const app = async(username, homedir) => {
         await fs.rn(currentDir, oldFileName, newFileName);
         updatePrompt();
     }
-    
+    async function cp(sourceFilePath, destinationDir) {
+        await fs.cp(sourceFilePath, destinationDir);
+        updatePrompt();
+    }
+    async function mv(sourceFilePath, destinationDir) {
+        await fs.mv(sourceFilePath, destinationDir);
+        updatePrompt();
+    }
+    async function rm(filePath) {
+        await fs.rm(filePath);
+        updatePrompt();
+    }
     rl.on('line', async (input) => {
         const [command, ...args] = input.trim().split(' ');
         switch (command) {
@@ -82,6 +93,15 @@ export const app = async(username, homedir) => {
                 break;
             case 'rn':
                 await rn(args[0], args[1]);
+                break;
+            case 'cp':
+                await cp(args[0], args[1]);
+                break;
+            case 'mv':
+                await mv(args[0], args[1]);
+                break;
+            case 'rm':
+                await rm(args[0]);
                 break;
             default:
                 console.log('Invalid input');
