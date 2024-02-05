@@ -2,6 +2,7 @@ import { createInterface } from 'readline';
 import { resolve } from 'path'; 
 import * as nwd from './operations/nwd.js';
 import * as fs from './operations/fs.js';
+import { operatingSysteInfo } from './operations/os.js';
 
 export const app = async(username, homedir) => {
     let currentDir = homedir;
@@ -73,6 +74,10 @@ export const app = async(username, homedir) => {
         await fs.rm(filePath);
         updatePrompt();
     }
+    async function os(arg) {
+        operatingSysteInfo(arg);
+        updatePrompt();
+    }
     rl.on('line', async (input) => {
         const [command, ...args] = input.trim().split(' ');
         switch (command) {
@@ -102,6 +107,9 @@ export const app = async(username, homedir) => {
                 break;
             case 'rm':
                 await rm(args[0]);
+                break;
+            case 'os':
+                await os(args[0]);
                 break;
             default:
                 console.log('Invalid input');
