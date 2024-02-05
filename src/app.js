@@ -4,6 +4,7 @@ import * as nwd from './operations/nwd.js';
 import * as fs from './operations/fs.js';
 import { operatingSysteInfo } from './operations/os.js';
 import { hs } from './operations/hash.js';
+import * as brotli from './operations/brotli.js';
 
 export const app = async(username, homedir) => {
     let currentDir = homedir;
@@ -83,6 +84,14 @@ export const app = async(username, homedir) => {
         await hs(filePath);
         updatePrompt();
     }
+    async function compress(inputPath, outputPath) {
+        await brotli.compressFile(inputPath, outputPath);
+        updatePrompt();
+    }
+    async function decompress(inputPath, outputPath) {
+        await brotli.decompressFile(inputPath, outputPath);
+        updatePrompt();
+    }
     rl.on('line', async (input) => {
         const [command, ...args] = input.trim().split(' ');
         switch (command) {
@@ -118,6 +127,12 @@ export const app = async(username, homedir) => {
                 break;
             case 'hash':
                 await hash(args[0]);
+                break;
+            case 'compress':
+                await compress(args[0], args[1]);
+                break;
+            case 'decompress':
+                await compress(args[0], args[1]);
                 break;
             default:
                 console.log('Invalid input');
