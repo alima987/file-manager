@@ -31,5 +31,7 @@ export function operatingSysteInfo(arg) {
        const archt = os.arch();
        console.log(`CPU architecture: ${archt}`);
        break;
+       default:
+		console.log(`Invalid argument ${arg}`)
     }
 }

@@ -27,7 +27,10 @@ export const app = async(username, homedir) => {
         rl.setPrompt(`You are currently in ${currentDir}\n`);
         rl.prompt();
     }
-
+    
+    async function exit() {
+        process.exit();
+    }
     async function up() {
         const parentDir = resolve(currentDir, '..');
         if (parentDir !== currentDir) {
@@ -95,6 +98,9 @@ export const app = async(username, homedir) => {
     rl.on('line', async (input) => {
         const [command, ...args] = input.trim().split(' ');
         switch (command) {
+            case '.exit':
+                await exit();
+                break;
             case 'up':
                 await up();
                 break;
