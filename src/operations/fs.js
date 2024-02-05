@@ -26,10 +26,6 @@ export async function cat(filePath) {
  
 export function add(currentDir, fileName) { 
     const filePath = resolve(currentDir, fileName); 
- 
-    if (path(filePath)) { 
-     console.error('Such file already exists'); 
-    }  
      
     writeFile(filePath, '', (err) => { 
         if (err) { 
