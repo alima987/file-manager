@@ -5,9 +5,6 @@ import { resolve, dirname, join, basename } from 'path';
 import fs from 'fs';
  
 export async function cat(filePath) { 
- if (!await path(filePath)) { 
-     console.error('No such file'); 
- } 
  
  const readStream = createReadStream(filePath, { encoding: 'utf8' }); 
  
@@ -19,17 +16,18 @@ export async function cat(filePath) {
      process.stdout.write('\n'); 
  }); 
  
- readStream.on('error', (error) => { 
-     console.error(`Error reading file: ${error.message}`); 
+ readStream.on('error', () => { 
+     console.error(`No such file`); 
  }); 
 } 
  
-export function add(currentDir, fileName) { 
+export async function add(currentDir, fileName) { 
+
     const filePath = resolve(currentDir, fileName); 
      
-    writeFile(filePath, '', (err) => { 
+    fs.writeFile(filePath, '', (err) => { 
         if (err) { 
-            console.error('Error creating file:', err); 
+            console.error('No such file');
         } else { 
             console.log(`Empty file ${fileName} created successfully in ${currentDir}`); 
         } 
@@ -42,7 +40,7 @@ export function rn(currentDir, oldFileName, newFileName) {
 
     fs.rename(oldFilePath, newFilePath, (err) => {
         if (err) {
-            console.error('Error renaming file:', err);
+            console.error('No such file');
         } else {
             console.log(`File ${oldFileName} renamed to ${newFileName} successfully in ${currentDir}`);
         }
@@ -71,6 +69,12 @@ export function cp(sourceFilePath, destinationDir) {
 }
 
 export async function mv(sourceFilePath, destinationDir) {
+    if (!await path(sourceFilePath)) {
+		throw new Error('Not correct path to original file');      
+	} 
+    if (!await path(destinationDir)) {
+		throw new Error('Not correct path to destination file');      
+	} 
     const sourceFile = resolve(sourceFilePath);
     const destinationFile = join(destinationDir, basename(sourceFile));
 
@@ -95,6 +99,9 @@ export async function mv(sourceFilePath, destinationDir) {
     });
 }
 export async function rm(filePath) {
+    if (!await path(filePath)) {
+		throw new Error('Not correct path');      
+	} 
       return new Promise ((resolve, reject) => {
         fs.unlink(filePath, (err) => {
             console.log('File is deleted successfully')
