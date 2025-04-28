@@ -1,8 +1,9 @@
 import { homedir } from "os";
 import readline from 'node:readline/promises';
 import * as nwd from "./operations/nwd.js"
+import * as bowf from "./operations/bowf.js"
 import { stdin as input, stdout as output } from 'node:process';
-import path from "node:path";
+
 const rl = readline.createInterface({ input, output });
 export const app = (username) => {
     let currDir = homedir()
@@ -47,6 +48,14 @@ export const app = (username) => {
           currDirCommand()
         }
     }
+    const cat = async(pathToFile) => {
+      await bowf.cat(pathToFile)
+      currDirCommand()
+    }
+    const add = async(newFileName) => {
+      await bowf.add(currDir, newFileName)
+      currDirCommand()
+    }
     rl.on('line', async(input) => {
       console.log(input)
       const [command, ...args] = input.trim().split(' ')
@@ -62,6 +71,12 @@ export const app = (username) => {
           break;
         case 'ls':
           await ls();
+          break;
+        case 'cat':
+          await cat(args[0]);
+          break;
+        case 'add':
+          await add(args[0]);
           break;
         default:
           console.log(`Invalid input`);
