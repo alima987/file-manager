@@ -56,6 +56,10 @@ export const app = (username) => {
       await bowf.add(currDir, newFileName)
       currDirCommand()
     }
+    const mkdir = async(newDirName) => {
+      await bowf.mkdir(currDir, newDirName)
+      currDirCommand()
+    }
     rl.on('line', async(input) => {
       console.log(input)
       const [command, ...args] = input.trim().split(' ')
@@ -77,6 +81,9 @@ export const app = (username) => {
           break;
         case 'add':
           await add(args[0]);
+          break;
+        case 'mkdir':
+          await mkdir(args[0]);
           break;
         default:
           console.log(`Invalid input`);

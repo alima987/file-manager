@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir as mkDir} from 'fs/promises';
 import { join  } from 'path';
 export const cat = async (pathToFile) => {
   try {
@@ -28,6 +28,17 @@ export const add = async (currDir, newFileName) => {
       console.log('File created successfully');
       return newFile
     } catch (error) {
+        console.error(`Error going up: ${error.message}`);
+    }
+}
+export const mkdir = async (currDir, newDirName) => {
+    try {
+      const newDirPath = join(currDir, newDirName)
+      const newDir = await mkDir(newDirPath, { recursive: true })
+      console.log('Directory created successfully');
+      return newDir
+
+    } catch(error) {
         console.error(`Error going up: ${error.message}`);
     }
 }
