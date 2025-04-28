@@ -1,32 +1,62 @@
-import os from 'os'; 
-import path from 'node:path';
-import { cwd }from 'node:process';
+import { homedir } from "os";
 import readline from 'node:readline/promises';
+import * as nwd from "./operations/nwd.js"
 import { stdin as input, stdout as output } from 'node:process';
+import path from "node:path";
 const rl = readline.createInterface({ input, output });
-export const app = async (username) => {
-    const homedir = os.homedir()
-    console.log(`You are currently in ${homedir}`); 
+export const app = (username) => {
+    let currDir = homedir()
     const goodbye = () => {
-        console.log(`Thank you for using File Manager,  ${username}, goodbye!`); 
+        console.log(`\nThank you for using File Manager,  ${username}, goodbye!`); 
     }
-    const command = await rl.question('Enter your command: ');
-      if (command.trim() === '.exit') {
-        exitProcess()
-      } else { 
-        console.log(`Answer: ${command}`);
-      }
+    const currDirCommand = () => {
+      rl.setPrompt(`You are currently in ${currDir}\n`);
+      rl.prompt()
+    }
     process.on('exit', () => {
         goodbye()
     });
     process.on('SIGINT', () => {
         exitProcess()
     })
-    function exitProcess() {
+    async function exit() {
+      process.exit();
+    }
+    async function exitProcess() {
         goodbye() 
-        rl.close();
         process.exit()
     }
+    const up = async() => {
+      const newPath = await nwd.up(currDir)
+      if (newPath) {
+        currDir = newPath
+        currDirCommand()
+      }
+    }
+    const cd = async(path) => {
+      const newPath = await nwd.cd(currDir, path)
+      if (newPath) {
+        currDir = newPath
+        currDirCommand()
+      }
+    }
+    rl.on('line', async(input) => {
+      console.log(input)
+      const [command, ...args] = input.trim().split(' ')
+      switch(command) {
+        case ".exit":
+          await exit(); 
+          break;
+        case "up":
+          await up();
+          break;
+        case 'cd':
+          await cd(args[0]);
+          break;
+        default:
+          console.log(`Invalid input`);
+          rl.prompt();
+      }
+  });
+  currDirCommand()
 }
-
-app();
