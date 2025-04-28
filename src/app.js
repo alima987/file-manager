@@ -40,6 +40,13 @@ export const app = (username) => {
         currDirCommand()
       }
     }
+    const ls = async() => {
+      const newPath = await nwd.ls(currDir) 
+        if (newPath) {
+          currDir = newPath
+          currDirCommand()
+        }
+    }
     rl.on('line', async(input) => {
       console.log(input)
       const [command, ...args] = input.trim().split(' ')
@@ -52,6 +59,9 @@ export const app = (username) => {
           break;
         case 'cd':
           await cd(args[0]);
+          break;
+        case 'ls':
+          await ls();
           break;
         default:
           console.log(`Invalid input`);

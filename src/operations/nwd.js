@@ -31,5 +31,31 @@ export const cd = async (currDir, path) => {
     return currDir
   }
 }
+export const ls = async(currDir) => {
+    try {
+      const files = await readdir(currDir);
+      const table = []
+      for (const file of files) {
+        const filePath = join(currDir, file)
+        const fileStat = await stat(filePath)
+        table.push({
+            Name: file,
+            Type: fileStat.isDirectory() ? 'directory' : 'file'
+        })
+      }
+      const sortedTable = table.sort((a, b) => {
+        if (a.Type === b.Type) {
+           return a.Name.localeCompare(b.Name)
+        } else if (a.Type === 'directory') {
+           return -1
+        } else {
+           return 1
+        }
+       })
+      console.table(sortedTable)
+    } catch(error) {
+        console.error(`Error reading directory: ${error.message}`);
+    }
+}
 
 
