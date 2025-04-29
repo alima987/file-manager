@@ -2,6 +2,7 @@ import { homedir } from "os";
 import readline from 'node:readline/promises';
 import * as nwd from "./operations/nwd.js"
 import * as bowf from "./operations/bowf.js"
+import { operatingSystem } from "./operations/os.js"
 import { stdin as input, stdout as output } from 'node:process';
 
 const rl = readline.createInterface({ input, output });
@@ -79,6 +80,10 @@ export const app = (username) => {
       await bowf.rm(pathToFile)
       currDirCommand()
     }
+    const os = async(arg) => {
+      await operatingSystem(arg)
+      currDirCommand()
+    }
 
     rl.on('line', async(input) => {
       console.log(input)
@@ -116,6 +121,9 @@ export const app = (username) => {
           break;
         case 'rm':
           await rm(args[0]);
+          break;
+        case 'os':
+          await os(args[0]);
           break;
         default:
           console.log(`Invalid input`);
