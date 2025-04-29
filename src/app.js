@@ -2,6 +2,7 @@ import { homedir } from "os";
 import readline from 'node:readline/promises';
 import * as nwd from "./operations/nwd.js"
 import * as bowf from "./operations/bowf.js"
+import * as cdo from "./operations/cdo.js"
 import { hashFile } from "./operations/hash.js"
 import { operatingSystem } from "./operations/os.js"
 import { stdin as input, stdout as output } from 'node:process';
@@ -89,6 +90,14 @@ export const app = (username) => {
       hashFile(pathToFile)
       currDirCommand()
     }
+    const compress = async(pathToFile, pathToDest) => {
+      cdo.compress(pathToFile, pathToDest)
+      currDirCommand()
+    }
+    const decompress = async(pathToFile, pathToDest) => {
+      cdo.decompress(pathToFile, pathToDest)
+      currDirCommand()
+    }
 
     rl.on('line', async(input) => {
       console.log(input)
@@ -132,6 +141,12 @@ export const app = (username) => {
           break;
         case 'hash':
           await hash(args[0]);
+          break;
+        case 'compress':
+          await compress(args[0], args[1]);
+          break;
+        case 'decompress':
+          await decompress(args[0], args[1]);
           break;
         default:
           console.log(`Invalid input`);
