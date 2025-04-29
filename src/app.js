@@ -59,7 +59,27 @@ export const app = (username) => {
     const mkdir = async(newDirName) => {
       await bowf.mkdir(currDir, newDirName)
       currDirCommand()
+    } 
+    const rn = async(pathToFile, newFileName) => {
+      bowf.rn(currDir, pathToFile, newFileName)
+      currDirCommand()
     }
+
+    const cp = async(pathToFile, pathToNewDir) => {
+      bowf.cp(pathToFile, pathToNewDir)
+      currDirCommand()
+    }
+
+    const mv = async(pathToFile, pathToNewDir) => {
+      await bowf.mv(pathToFile, pathToNewDir)
+      currDirCommand()
+    }
+
+    const rm = async(pathToFile) => {
+      await bowf.rm(pathToFile)
+      currDirCommand()
+    }
+
     rl.on('line', async(input) => {
       console.log(input)
       const [command, ...args] = input.trim().split(' ')
@@ -84,6 +104,18 @@ export const app = (username) => {
           break;
         case 'mkdir':
           await mkdir(args[0]);
+          break;
+        case 'rn':
+          await rn(args[0], args[1]);
+          break;
+        case 'cp':
+          await cp(args[0], args[1]);
+          break;
+        case 'mv':
+          await mv(args[0], args[1]);
+          break;
+        case 'rm':
+          await rm(args[0]);
           break;
         default:
           console.log(`Invalid input`);
