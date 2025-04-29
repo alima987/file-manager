@@ -10,9 +10,9 @@ export const hashFile = (pathToFile) => {
           console.log(`Calculated hash: ${digest}`);
       });
       rs.on('error', (err) => {
-        console.error(`Error reading file`);
+        console.error(`Operation failed! Error reading file`);
     });
     } catch (error) {
-        console.error(`Error going up: ${error.message}`);
+        console.error(`Operation failed! Error going up: ${error.message}`);
     }
 }

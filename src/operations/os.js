@@ -28,6 +28,6 @@ export const operatingSystem = async (arg) => {
         console.log(`CPU architecture: ${architecture}`)
         break 
     default:
-      console.log(`Invalid argument ${arg}`)
+      console.log(`Operation failed! Invalid argument ${arg}`)
  }
 }

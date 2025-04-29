@@ -19,7 +19,7 @@ export const cat = async (pathToFile) => {
      });
 
   } catch (error) {
-    console.error(`Error going up: ${error.message}`);
+    console.error(`Operation failed! Error going up: ${error.message}`);
   }
 }
 export const add = async (currDir, newFileName) => {
@@ -28,7 +28,7 @@ export const add = async (currDir, newFileName) => {
       await writeFile(newFilePath, '')
       console.log('File created successfully');
     } catch (error) {
-        console.error(`Error going up: ${error.message}`);
+        console.error(`Operation failed! Error going up: ${error.message}`);
     }
 }
 export const mkdir = async (currDir, newDirName) => {
@@ -38,7 +38,7 @@ export const mkdir = async (currDir, newDirName) => {
       console.log('Directory created successfully');
 
     } catch(error) {
-        console.error(`Error going up: ${error.message}`);
+        console.error(`Operation failed! Error going up: ${error.message}`);
     }
 }
 export const rn = (currDir, pathToFile, newFileName) => {
@@ -47,13 +47,13 @@ export const rn = (currDir, pathToFile, newFileName) => {
     const newFilePath = join(dirname(oldFilePath), newFileName)
     fs.rename(oldFilePath, newFilePath, (err) => {
       if (err) {
-        console.error('Error renaming file:', err);
+        console.error('Operation failed! Error renaming file:', err);
       } else {
         console.log('File renamed successfully');
       }
     })
   } catch(error) {
-    console.error(`Error going up: ${error.message}`);
+    console.error(`Operation failed! Error going up: ${error.message}`);
   }
 }
 export const cp = (pathToFile, pathToNewDir) => {
@@ -78,7 +78,7 @@ export const cp = (pathToFile, pathToNewDir) => {
     });
 
   } catch (error) {
-    console.error(`Error going up: ${error.message}`);
+    console.error(`Operation failed! Error going up: ${error.message}`);
   }
 }
 export const mv = async (pathToFile, pathToNewDir) => {
@@ -94,7 +94,7 @@ export const mv = async (pathToFile, pathToNewDir) => {
     console.log('File moved successfully.');
 
   } catch (error) {
-    console.error(`Error going up: ${error.message}`);
+    console.error(`Operation failed! Error going up: ${error.message}`);
   }
 }
 export const rm = async (pathToFile) => {
@@ -103,6 +103,6 @@ export const rm = async (pathToFile) => {
     console.log('File deleted successfully.');
 
   } catch (error) {
-    console.error(`Error going up: ${error.message}`);
+    console.error(`Operation failed! Error going up: ${error.message}`);
   }
 }

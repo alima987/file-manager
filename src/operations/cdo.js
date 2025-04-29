@@ -18,7 +18,7 @@ export const compress = (pathToFile, pathToDest) => {
       });
   
       brotli.on('error', (error) => {
-          console.error(`Error compressing file: ${error.message}`);
+          console.error(`Operation failed! Error compressing file: ${error.message}`);
           readStream.destroy();
           writeStream.destroy();
       });
@@ -46,7 +46,7 @@ export const decompress = (pathToFile, pathToDest) => {
     });
 
     brotli.on('error', (error) => {
-        console.error(`Error decompressing file: ${error.message}`);
+        console.error(`Operation failed! Error decompressing file: ${error.message}`);
         readStream.destroy();
         writeStream.destroy();
     });

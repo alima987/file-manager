@@ -11,7 +11,7 @@ const rl = readline.createInterface({ input, output });
 export const app = (username) => {
     let currDir = homedir()
     const goodbye = () => {
-        console.log(`\nThank you for using File Manager,  ${username}, goodbye!`); 
+        console.log(`Thank you for using File Manager,  ${username}, goodbye!`); 
     }
     const currDirCommand = () => {
       rl.setPrompt(`You are currently in ${currDir}\n`);

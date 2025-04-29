@@ -6,10 +6,13 @@ import { join, resolve } from 'path';
 export const up = async(currDir) => {
     try {
         const parentDir = path.resolve(currDir, '..')
-        console.log(parentDir)
-        return parentDir
+        if (parentDir !== currDir) {
+          currDir = parentDir;
+        } else {
+          console.log(`You are already in the root folder ${currDir}`);
+        }
     } catch(error) {
-        console.error(`Error going up: ${error.message}`);
+        console.error(`Operation failed! Error going up: ${error.message}`);
     }
 }
 export const cd = async (currDir, path) => {
@@ -27,7 +30,7 @@ export const cd = async (currDir, path) => {
         return currDir
     }
   } catch (error) {
-    console.log(`Error: ${error.message}`);
+    console.log(`Operation failed! Error: ${error.message}`);
     return currDir
   }
 }
@@ -54,7 +57,7 @@ export const ls = async(currDir) => {
        })
       console.table(sortedTable)
     } catch(error) {
-        console.error(`Error reading directory: ${error.message}`);
+        console.error(`Operation failed! Error reading directory: ${error.message}`);
     }
 }
 
