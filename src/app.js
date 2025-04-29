@@ -2,6 +2,7 @@ import { homedir } from "os";
 import readline from 'node:readline/promises';
 import * as nwd from "./operations/nwd.js"
 import * as bowf from "./operations/bowf.js"
+import { hashFile } from "./operations/hash.js"
 import { operatingSystem } from "./operations/os.js"
 import { stdin as input, stdout as output } from 'node:process';
 
@@ -84,6 +85,10 @@ export const app = (username) => {
       await operatingSystem(arg)
       currDirCommand()
     }
+    const hash = async(pathToFile) => {
+      hashFile(pathToFile)
+      currDirCommand()
+    }
 
     rl.on('line', async(input) => {
       console.log(input)
@@ -124,6 +129,9 @@ export const app = (username) => {
           break;
         case 'os':
           await os(args[0]);
+          break;
+        case 'hash':
+          await hash(args[0]);
           break;
         default:
           console.log(`Invalid input`);
