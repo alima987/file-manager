@@ -8,7 +8,6 @@ export const operatingSystem = async (arg) => {
       break;
     case "--cpus":
       const cpus = os.cpus()
-      console.log(`CPUs info: ${cpus}`); 
       cpus.forEach((cpu, index) => {
         const model = cpu.model;
         const clockRate = (cpu.speed / 1000).toFixed(2)

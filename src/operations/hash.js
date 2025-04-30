@@ -1,7 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
 export const hashFile = (pathToFile) => {
-    try {
       const hash = crypto.createHash('sha256');
       const rs = fs.createReadStream(pathToFile);
       rs.on('data', chunk => hash.update(chunk));
@@ -12,7 +11,4 @@ export const hashFile = (pathToFile) => {
       rs.on('error', (err) => {
         console.error(`Operation failed! Error reading file`);
     });
-    } catch (error) {
-        console.error(`Operation failed! Error going up: ${error.message}`);
-    }
 }

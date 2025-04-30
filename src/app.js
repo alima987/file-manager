@@ -6,6 +6,7 @@ import * as cdo from "./operations/cdo.js"
 import { hashFile } from "./operations/hash.js"
 import { operatingSystem } from "./operations/os.js"
 import { stdin as input, stdout as output } from 'node:process';
+import { resolve } from "node:path";
 
 const rl = readline.createInterface({ input, output });
 export const app = (username) => {
@@ -31,11 +32,13 @@ export const app = (username) => {
         process.exit()
     }
     const up = async() => {
-      const newPath = await nwd.up(currDir)
-      if (newPath) {
-        currDir = newPath
-        currDirCommand()
-      }
+      const parentDir = resolve(currDir, '..');
+        if (parentDir !== currDir) {
+            currDir = parentDir;
+            currDirCommand()
+        } else {
+            console.log(`Operation failed! You are already in the root folder ${currentDir}`);
+        }
     }
     const cd = async(path) => {
       const newPath = await nwd.cd(currDir, path)
@@ -116,7 +119,7 @@ export const app = (username) => {
           await ls();
           break;
         case 'cat':
-          await cat(args[0]);
+          await cat(input.substring(4).trim());
           break;
         case 'add':
           await add(args[0]);

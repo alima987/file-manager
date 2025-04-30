@@ -2,19 +2,6 @@ import { readdir, stat } from 'fs/promises';
 import { lstat } from 'fs/promises';
 import { join, resolve } from 'path'; 
 
-
-export const up = async(currDir) => {
-    try {
-        const parentDir = path.resolve(currDir, '..')
-        if (parentDir !== currDir) {
-          currDir = parentDir;
-        } else {
-          console.log(`You are already in the root folder ${currDir}`);
-        }
-    } catch(error) {
-        console.error(`Operation failed! Error going up: ${error.message}`);
-    }
-}
 export const cd = async (currDir, path) => {
     if (!path) {
         console.log('No path specified');

@@ -3,24 +3,20 @@ import { writeFile, mkdir as mkDir, unlink} from 'fs/promises';
 import { basename, dirname, join, resolve  } from 'path';
 import { pipeline } from 'stream/promises';
 export const cat = async (pathToFile) => {
-  try {
     const rs = fs.createReadStream(pathToFile, {encoding: 'utf8'})
-    rs.on('data', function(chunk) {
-        process.stdout.write(chunk)
-     });
+    rs.on('data', (chunk) => { 
+      process.stdout.write(chunk) 
+    }); 
      
-     rs.on('end',function() {
+    rs.on('end', () => {
         process.stdout.write('\n')
-     });
+    });
      
-     rs.on('error', (err) => {
+    rs.on('error', (err) => {
         console.log(err)
         console.log("No such file");
-     });
+    });
 
-  } catch (error) {
-    console.error(`Operation failed! Error going up: ${error.message}`);
-  }
 }
 export const add = async (currDir, newFileName) => {
     try {
@@ -42,7 +38,6 @@ export const mkdir = async (currDir, newDirName) => {
     }
 }
 export const rn = (currDir, pathToFile, newFileName) => {
-  try {
     const oldFilePath = resolve(currDir, pathToFile)
     const newFilePath = join(dirname(oldFilePath), newFileName)
     fs.rename(oldFilePath, newFilePath, (err) => {
@@ -52,12 +47,8 @@ export const rn = (currDir, pathToFile, newFileName) => {
         console.log('File renamed successfully');
       }
     })
-  } catch(error) {
-    console.error(`Operation failed! Error going up: ${error.message}`);
-  }
 }
 export const cp = (pathToFile, pathToNewDir) => {
-  try {
     const sourcePath = basename(pathToFile);
     const destinationPath = join(pathToNewDir, sourcePath);
     const readStream = fs.createReadStream(pathToFile);
@@ -66,20 +57,16 @@ export const cp = (pathToFile, pathToNewDir) => {
     readStream.pipe(writeStream);
 
     readStream.on('error', (err) => {
-      console.error('Read error:', err);
+      console.error('Operation failed! Read error:', err);
     });
     
     writeStream.on('error', (err) => {
-      console.error('Write error:', err);
+      console.error('Operation failed! Write error:', err);
     });
     
     writeStream.on('finish', () => {
       console.log('File copied successfully.');
     });
-
-  } catch (error) {
-    console.error(`Operation failed! Error going up: ${error.message}`);
-  }
 }
 export const mv = async (pathToFile, pathToNewDir) => {
   try {
